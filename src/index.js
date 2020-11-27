@@ -25,12 +25,11 @@ registerPlugin( 'myprefix-sidebar', {
 //Gutenburg toggle
 let GutenbergToggle = (props) => {
     return (
-        <TextControl
-            value={props.state}
-            label={__("Use Block Editor Toggle", "textdomain")}
+        <ToggleControl
+        label="Enable Block Editor"
+        checked={ props.state }
+        onChange={(value) => props.onBlockEditorToggleChange(value)}
         />
-        <RadioControl
-
     )
 }
 
@@ -38,6 +37,16 @@ GutenbergToggle = withSelect(
     (select) => {
         return {
             state: select('core/editor').getEditedPostAttribute('meta')['_use_block_editor']
+        }
+    }
+)(GutenbergToggle);
+
+GutenbergToggle = withDispatch(
+    (dispatch) => {
+        return {
+            onBlockEditorToggleChange: function (value) {
+                dispatch('core/editor').editPost({ meta: { _use_block_editor: value } });
+            }
         }
     }
 )(GutenbergToggle);
@@ -61,7 +70,6 @@ registerPlugin('plugin-document-setting-panel-gutenberg-toggle', {
 // const { registerPlugin } = wp.plugins
 import { RadioControl } from '@wordpress/components';
 const { PluginDocumentSettingPanel } = wp.editPost
-const { withState } = wp.compose
 
 let SubtitleControl = ({ subtitle, handleSubtitleChange }) => (
     <TextControl

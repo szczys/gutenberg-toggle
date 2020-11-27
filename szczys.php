@@ -15,7 +15,7 @@ add_action( 'enqueue_block_editor_assets', 'szczys_enqueue' );
 function myprefix_register_meta() {
     register_meta('post', '_use_block_editor',array(
 		'show_in_rest' => true,
-		'type' => 'string',
+		'type' => 'boolean',
 		'single' => true,
 		'sanitize_callback' => 'sanitize_text_field',
 		'auth_callback' => function() { 
