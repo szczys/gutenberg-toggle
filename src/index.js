@@ -1,7 +1,7 @@
 //alert(true)
 
 import { registerPlugin } from "@wordpress/plugins";
-import { PluginSidebar } from "@wordpress/edit-post";
+import { PluginSidebar, PluginDocumentSettingPanel } from "@wordpress/edit-post";
 import { TextControl, ToggleControl } from "@wordpress/components";
 import { withState } from '@wordpress/compose';
 import { withSelect, withDispatch } from "@wordpress/data";
@@ -44,7 +44,7 @@ GutenbergToggle = withSelect(
 GutenbergToggle = withDispatch(
     (dispatch) => {
         return {
-            onBlockEditorToggleChange: function (value) {
+            onBlockEditorToggleChange: (value) => {
                 dispatch('core/editor').editPost({ meta: { _use_block_editor: value } });
             }
         }
@@ -69,7 +69,6 @@ registerPlugin('plugin-document-setting-panel-gutenberg-toggle', {
 
 // const { registerPlugin } = wp.plugins
 import { RadioControl } from '@wordpress/components';
-const { PluginDocumentSettingPanel } = wp.editPost
 
 let SubtitleControl = ({ subtitle, handleSubtitleChange }) => (
     <TextControl

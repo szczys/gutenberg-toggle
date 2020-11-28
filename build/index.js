@@ -129,18 +129,13 @@ Object(_wordpress_plugins__WEBPACK_IMPORTED_MODULE_1__["registerPlugin"])('mypre
 }); //Gutenburg toggle
 
 var GutenbergToggle = function GutenbergToggle(props) {
-  return (// <TextControl
-    //     value={props.state}
-    //     label={__("Use Block Editor Toggle", "textdomain")}
-    // />
-    Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["ToggleControl"], {
-      label: "Enable Block Editor",
-      checked: props.state,
-      onChange: function onChange(value) {
-        return props.onBlockEditorToggleChange(value);
-      }
-    })
-  );
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["ToggleControl"], {
+    label: "Enable Block Editor",
+    checked: props.state,
+    onChange: function onChange(value) {
+      return props.onBlockEditorToggleChange(value);
+    }
+  });
 };
 
 GutenbergToggle = Object(_wordpress_data__WEBPACK_IMPORTED_MODULE_5__["withSelect"])(function (select) {
@@ -161,7 +156,7 @@ GutenbergToggle = Object(_wordpress_data__WEBPACK_IMPORTED_MODULE_5__["withDispa
 })(GutenbergToggle);
 Object(_wordpress_plugins__WEBPACK_IMPORTED_MODULE_1__["registerPlugin"])('plugin-document-setting-panel-gutenberg-toggle', {
   render: function render() {
-    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(PluginDocumentSettingPanel, {
+    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_edit_post__WEBPACK_IMPORTED_MODULE_2__["PluginDocumentSettingPanel"], {
       name: "gutenberg-toggle",
       title: "Use Block Editor",
       className: "gutenberg-toggle"
@@ -171,7 +166,6 @@ Object(_wordpress_plugins__WEBPACK_IMPORTED_MODULE_1__["registerPlugin"])('plugi
 }); // const { registerPlugin } = wp.plugins
 
 
-var PluginDocumentSettingPanel = wp.editPost.PluginDocumentSettingPanel;
 
 var SubtitleControl = function SubtitleControl(_ref) {
   var subtitle = _ref.subtitle,
@@ -238,7 +232,7 @@ HeaderImageHeightControl = Object(_wordpress_data__WEBPACK_IMPORTED_MODULE_5__["
 })(HeaderImageHeightControl);
 
 var PluginDocumentSettingPanelDemo = function PluginDocumentSettingPanelDemo() {
-  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(PluginDocumentSettingPanel, {
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_edit_post__WEBPACK_IMPORTED_MODULE_2__["PluginDocumentSettingPanel"], {
     name: "custom-panel",
     title: "Custom Panel",
     className: "custom-panel"
