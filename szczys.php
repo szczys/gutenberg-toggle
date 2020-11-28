@@ -29,10 +29,11 @@ function gutenberg_toggle_register_meta()
 }
 add_action('init', 'gutenberg_toggle_register_meta');
 
+//Affect the editor only if the user_block_editor meta actually exists
 //Enable Gutenburg Editor but only if the use_block_editor meta is 'true' (string)
 add_filter('use_block_editor_for_post', function ($can_edit, $post) {
-
 	if (empty($post->ID)) return $can_edit;
+	if (metadata_exists('post', $post->ID, '_use_block_editor') === false) return $can_edit;
 	if (get_post_meta($post->ID, '_use_block_editor', true) === '1') {
 		add_filter('user_can_richedit', '__return_true', 50);
 		return true;
