@@ -37,7 +37,7 @@ add_filter('use_block_editor_for_post', function ($can_edit, $post) {
 		add_filter('user_can_richedit', '__return_true', 50);
 		return true;
 	}
-	return $can_edit;
+	else { return false; }
 }, 10, 2);
 
 //Need metaboxes for the old MCE editor (Javascript handles block editor controls)
@@ -62,9 +62,9 @@ function gutenberg_toggle_metabox_html($post)
 	wp_nonce_field('gutenberg_toggle_update_post_metabox', 'gutenberg_toggle_update_post_nonce');
 	?>
 	<p><?php echo $should_use_block_editor ?>
-		<label for="gutenberg_toggle_control" class="switch">
-			<input type="checkbox" name="gutenberg_toggle_control" value="1" <?php if ($should_use_block_editor === '1') echo "checked"; ?> />
-			<span class="slider round"></span>
+		<label for="gutenberg_toggle_control">
+			<input type="checkbox" style="margin-left:12px; margin-right:6px;" name="gutenberg_toggle_control" value="1" <?php if ($should_use_block_editor === '1') echo "checked"; ?> />
+			Enable Block Editor
 		</label>
 	</p>
 	<?php
