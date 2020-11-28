@@ -1,18 +1,24 @@
 <?php
 /*
-Plugin Name: Szczys
+Plugin Name: Gutenberg Toggle
+Plugin URI: https://github.com/szczys/gutenberg-toggle
+Description: Simple plugin adds a control to the sidebar of each post to choose between MCE and Block Editor.
+Version: 0.0.1
+Author: Mike Szczys
+Author URI: https://twitter.com/szczys
+License: MIT License
 */
 
 //Enqueue the dependencies needed
-function szczys_enqueue()
+function gutenberg_toggle_enqueue()
 {
 	wp_enqueue_script(
-		'szczys-script',
+		'gutenberg-toggle-script',
 		plugins_url('build/index.js', __FILE__),
 		array('wp-plugins', 'wp-edit-post', 'wp-i18n', 'wp-element', 'wp-components', 'wp-data', 'wp-compose')
 	);
 }
-add_action('enqueue_block_editor_assets', 'szczys_enqueue');
+add_action('enqueue_block_editor_assets', 'gutenberg_toggle_enqueue');
 
 //Register the datatype needed to keep track of block editor usage for individual posts
 function gutenberg_toggle_register_meta()
