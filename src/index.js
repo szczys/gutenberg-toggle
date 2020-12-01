@@ -1,5 +1,3 @@
-//alert(true)
-
 import { registerPlugin } from "@wordpress/plugins";
 import { PluginDocumentSettingPanel } from "@wordpress/edit-post";
 import { ToggleControl } from "@wordpress/components";
