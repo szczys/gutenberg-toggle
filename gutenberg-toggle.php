@@ -86,9 +86,9 @@ function gutenberg_save_post_metabox($post_id, $post) {
 	  return;
 	}
 	if( isset( $_POST[ 'gutenberg_toggle_control' ] ) ) {
-		update_post_meta( $post_id, '_use_block_editor', 1 );
+		update_post_meta( $post_id, '_use_block_editor', true );
 	} else {
-		update_post_meta( $post_id, '_use_block_editor', null );
+		update_post_meta( $post_id, '_use_block_editor', false );
 	}
   }
   add_action( 'save_post', 'gutenberg_save_post_metabox', 10, 2 );
