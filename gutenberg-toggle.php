@@ -27,6 +27,7 @@ function gutenberg_toggle_register_meta()
 		'show_in_rest' => true,
 		'type' => 'boolean',
 		'single' => true,
+		'default' => true,
 		'sanitize_callback' => 'sanitize_text_field',
 		'auth_callback' => function () {
 			return current_user_can('edit_posts');
@@ -68,7 +69,7 @@ function gutenberg_toggle_metabox_html($post)
 	$should_use_block_editor = get_post_meta($post->ID, '_use_block_editor', true);
 	wp_nonce_field('gutenberg_toggle_update_post_metabox', 'gutenberg_toggle_update_post_nonce');
 	?>
-	<p><?php echo $should_use_block_editor ?>
+	<p>
 		<label for="gutenberg_toggle_control">
 			<input type="checkbox" style="margin-left:12px; margin-right:6px;" name="gutenberg_toggle_control" value="1" <?php if ($should_use_block_editor === '1') echo "checked"; ?> />
 			Enable Block Editor
