@@ -39,12 +39,8 @@ add_action('init', 'gutenberg_toggle_register_meta');
 //Affect the editor only if the user_block_editor meta actually exists
 //Enable Gutenburg Editor but only if the use_block_editor meta is 'true' (string)
 add_filter('use_block_editor_for_post', function ($can_edit, $post) {
-	$opts = get_option('gutenberg_toggle_plugin_options');
-	//echo '<script>console.log("options:'.print_r($opts).'")</script>';
-	if (array_key_exists('users_allowed', $opts)) {
-		echo '<script>console.log("options:'.$opts['users_allowed'].'")</script>';
-	}
 	if (empty($post->ID)) return $can_edit;
+	if (!(gutenberg_toggle_user_has_permission(wp_get_current_user()))) return $can_edit;
 	if (metadata_exists('post', $post->ID, '_use_block_editor') === false) return $can_edit;
 	if (get_post_meta($post->ID, '_use_block_editor', true) === '1') {
 		add_filter('user_can_richedit', '__return_true', 50);
@@ -97,6 +93,17 @@ function gutenberg_save_post_metabox($post_id, $post) {
 	}
   }
   add_action( 'save_post', 'gutenberg_save_post_metabox', 10, 2 );
+
+//Does this user have permission?
+function gutenberg_toggle_user_has_permission($user_obj) {
+	$opts = gutenberg_toggle_get_opts_with_default();
+	if (array_key_exists('enable_all', $opts)) {
+		return true;
+	}
+	//TODO: Parse the enable user list here
+	//$username = $user_obj->get('user_login');
+	return false;
+}
 
 //Make a settings page
 function gutenberg_toggle_add_settings_page() {
