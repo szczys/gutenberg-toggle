@@ -39,6 +39,11 @@ add_action('init', 'gutenberg_toggle_register_meta');
 //Affect the editor only if the user_block_editor meta actually exists
 //Enable Gutenburg Editor but only if the use_block_editor meta is 'true' (string)
 add_filter('use_block_editor_for_post', function ($can_edit, $post) {
+	$opts = get_option('gutenberg_toggle_plugin_options');
+	//echo '<script>console.log("options:'.print_r($opts).'")</script>';
+	if (array_key_exists('users_allowed', $opts)) {
+		echo '<script>console.log("options:'.$opts['users_allowed'].'")</script>';
+	}
 	if (empty($post->ID)) return $can_edit;
 	if (metadata_exists('post', $post->ID, '_use_block_editor') === false) return $can_edit;
 	if (get_post_meta($post->ID, '_use_block_editor', true) === '1') {
@@ -113,43 +118,40 @@ function gutenburg_toggle_render_plugin_settings_page() {
 
 function gutenberg_toggle_register_settings() {
     register_setting( 'gutenberg_toggle_plugin_options', 'gutenberg_toggle_plugin_options', 'gutenberg_toggle_plugin_options_validate' );
-    add_settings_section( 'api_settings', 'API Settings', 'gutenberg_toggle_plugin_section_text', 'gutenberg_toggle_plugin' );
+    add_settings_section( 'which_users', 'Select Users', 'gutenberg_toggle_plugin_section_text', 'gutenberg_toggle_plugin' );
 
-    add_settings_field( 'gutenberg_toggle_plugin_setting_api_key', 'API Key', 'gutenberg_toggle_plugin_setting_api_key', 'gutenberg_toggle_plugin', 'api_settings' );
-    add_settings_field( 'gutenberg_toggle_plugin_setting_results_limit', 'Results Limit', 'gutenberg_toggle_plugin_setting_results_limit', 'gutenberg_toggle_plugin', 'api_settings' );
-    add_settings_field( 'gutenberg_toggle_plugin_setting_start_date', 'Start Date', 'gutenberg_toggle_plugin_setting_start_date', 'gutenberg_toggle_plugin', 'api_settings' );
+    add_settings_field( 'gutenberg_toggle_plugin_setting_users', 'Enable Plugin Users on this List<br>(comma separated):', 'gutenberg_toggle_plugin_setting_users', 'gutenberg_toggle_plugin', 'which_users' );
+    add_settings_field( 'gutenberg_toggle_plugin_setting_all', 'Make Plugin Active for All Users', 'gutenberg_toggle_plugin_setting_all', 'gutenberg_toggle_plugin', 'which_users' );
 }
 add_action( 'admin_init', 'gutenberg_toggle_register_settings' );
 
 function gutenberg_toggle_plugin_options_validate( $input ) {
 	//TODO: Validate input
-	$outlist = explode(",", $input);
-	$outlist = arra_map('trim', $outlist);
-    return $outlist;
+    return $input;
 }
 
 function gutenberg_toggle_plugin_section_text() {
-    echo '<p>Here you can set all the options for using the API</p>';
+    echo '<p>Choose which users will see this plugin.<br>Users not specified will not see plugin controls in post editor and will be show the system wide default editor.</p>';
 }
 
-function gutenberg_toggle_plugin_setting_api_key() {
-	$options = get_option( 'gutenberg_toggle_plugin_options' );
-	if ($options === false) {
-		$writers_list = "";
-	}
-	else $writers_list = esc_attr( $options['api_key'] );
-    echo "<input id='gutenberg_toggle_plugin_setting_api_key' name='gutenberg_toggle_plugin_options[api_key]' type='text' value='".$writers_list."' />";
+function gutenberg_toggle_get_opts_with_default() {
+	//Returns default values when no entry exists in db (defaults to all users)
+	return get_option( 'gutenberg_toggle_plugin_options', array('users_allowed'=>"", 'enable_all'=>"on"));
+}
+
+function gutenberg_toggle_plugin_setting_users() {
+	$options = gutenberg_toggle_get_opts_with_default();
+	$writers_list = esc_attr( $options['users_allowed'] );
+    echo "<input id='gutenberg_toggle_plugin_setting_users' name='gutenberg_toggle_plugin_options[users_allowed]' type='text' value='".$writers_list."' />";
 	//echo "<input type='text' value='hello' />";
 }
 
-function gutenberg_toggle_plugin_setting_results_limit() {
-    $options = get_option( 'gutenberg_toggle_plugin_options' );
-    //echo "<input id='gutenberg_toggle_plugin_setting_results_limit' name='gutenberg_toggle_plugin_options[results_limit]' type='text' value='{esc_attr( $options['results_limit'] )}' />";
-	echo "<input type='text' value='there' />";
-}
-
-function gutenberg_toggle_plugin_setting_start_date() {
-    $options = get_option( 'gutenberg_toggle_plugin_options' );
-    //echo "<input id='gutenberg_toggle_plugin_setting_start_date' name='gutenberg_toggle_plugin_options[start_date]' type='text' value='{esc_attr( $options['start_date'] )}' />";
-	echo "<input type='text' value='general' />";
+function gutenberg_toggle_plugin_setting_all() {
+	$options = gutenberg_toggle_get_opts_with_default();
+	$checked = "unchecked";
+	if (array_key_exists('enable_all',$options)) {
+		$checked = "checked";
+	}
+    //echo "<input id='gutenberg_toggle_plugin_setting_all' name='gutenberg_toggle_plugin_options[results_limit]' type='text' value='{esc_attr( $options['results_limit'] )}' />";
+	echo "<input id='gutenberg_toggle_plugin_setting_all' name='gutenberg_toggle_plugin_options[enable_all]' type='checkbox' ".$checked."/>";
 }
