@@ -3,7 +3,7 @@
 Plugin Name: Gutenberg Toggle
 Plugin URI: https://github.com/szczys/gutenberg-toggle
 Description: Simple plugin adds a control to the sidebar of each post to choose between MCE and Block Editor.
-Version: 0.0.1
+Version: 0.0.2
 Author: Mike Szczys
 Author URI: https://twitter.com/szczys
 License: MIT License
@@ -12,6 +12,7 @@ License: MIT License
 //Enqueue the dependencies needed
 function gutenberg_toggle_enqueue()
 {
+	if (!(gutenberg_toggle_user_has_permission(wp_get_current_user()))) return; //Trap based on settings
 	wp_enqueue_script(
 		'gutenberg-toggle-script',
 		plugins_url('build/index.js', __FILE__),
@@ -40,7 +41,7 @@ add_action('init', 'gutenberg_toggle_register_meta');
 //Enable Gutenburg Editor but only if the use_block_editor meta is 'true' (string)
 add_filter('use_block_editor_for_post', function ($can_edit, $post) {
 	if (empty($post->ID)) return $can_edit;
-	if (!(gutenberg_toggle_user_has_permission(wp_get_current_user()))) return $can_edit;
+	if (!(gutenberg_toggle_user_has_permission(wp_get_current_user()))) return $can_edit; //Trap based on settings
 	if (metadata_exists('post', $post->ID, '_use_block_editor') === false) return $can_edit;
 	if (get_post_meta($post->ID, '_use_block_editor', true) === '1') {
 		add_filter('user_can_richedit', '__return_true', 50);
@@ -52,6 +53,7 @@ add_filter('use_block_editor_for_post', function ($can_edit, $post) {
 //Need metaboxes for the old MCE editor (Javascript handles block editor controls)
 function gutenberg_toggle_add_meta_box()
 {
+	if (!(gutenberg_toggle_user_has_permission(wp_get_current_user()))) return; //Trap based on settings
 	add_meta_box(
 		'gutenberg_toggle_metabox',
 		'Use Block Editor',
@@ -101,7 +103,11 @@ function gutenberg_toggle_user_has_permission($user_obj) {
 		return true;
 	}
 	//TODO: Parse the enable user list here
-	//$username = $user_obj->get('user_login');
+	$username = $user_obj->get('user_login');
+	$users_allowed = array_map('trim', explode(",",$opts['users_allowed']));
+	if (in_array($username, $users_allowed)) {
+		return true;
+	}
 	return false;
 }
 
