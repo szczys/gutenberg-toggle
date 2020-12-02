@@ -26,3 +26,4 @@ During development use `npm start` to keep javascript up-to-date. Before packagi
   * https://www.youtube.com/watch?v=mi8kpAgHYFo
   * https://css-tricks.com/managing-wordpress-metadata-in-gutenberg-using-a-sidebar-plugin/
   * https://www.hostinger.com/tutorials/run-docker-wordpress
+  * https://deliciousbrains.com/create-wordpress-plugin-settings-page/

@@ -92,3 +92,64 @@ function gutenberg_save_post_metabox($post_id, $post) {
 	}
   }
   add_action( 'save_post', 'gutenberg_save_post_metabox', 10, 2 );
+
+//Make a settings page
+function gutenberg_toggle_add_settings_page() {
+    add_options_page( __('Gutenberg Toggle Plugin Settings', 'textdomain'), __('Block Editor Toggle', 'textdomain'), 'manage_options', "gutenberg-toggle-plugin", 'gutenburg_toggle_render_plugin_settings_page' );
+}
+add_action( 'admin_menu', 'gutenberg_toggle_add_settings_page' );
+
+function gutenburg_toggle_render_plugin_settings_page() {
+    ?>
+    <h2>Gutenberg Toggle Plugin Settings</h2>
+    <form action="options.php" method="post">
+        <?php 
+        settings_fields( 'gutenberg_toggle_plugin_options' );
+        do_settings_sections( 'gutenberg_toggle_plugin' ); ?>
+        <input name="submit" class="button button-primary" type="submit" value="<?php esc_attr_e( 'Save' ); ?>" />
+    </form>
+    <?php
+}
+
+function gutenberg_toggle_register_settings() {
+    register_setting( 'gutenberg_toggle_plugin_options', 'gutenberg_toggle_plugin_options', 'gutenberg_toggle_plugin_options_validate' );
+    add_settings_section( 'api_settings', 'API Settings', 'gutenberg_toggle_plugin_section_text', 'gutenberg_toggle_plugin' );
+
+    add_settings_field( 'gutenberg_toggle_plugin_setting_api_key', 'API Key', 'gutenberg_toggle_plugin_setting_api_key', 'gutenberg_toggle_plugin', 'api_settings' );
+    add_settings_field( 'gutenberg_toggle_plugin_setting_results_limit', 'Results Limit', 'gutenberg_toggle_plugin_setting_results_limit', 'gutenberg_toggle_plugin', 'api_settings' );
+    add_settings_field( 'gutenberg_toggle_plugin_setting_start_date', 'Start Date', 'gutenberg_toggle_plugin_setting_start_date', 'gutenberg_toggle_plugin', 'api_settings' );
+}
+add_action( 'admin_init', 'gutenberg_toggle_register_settings' );
+
+function gutenberg_toggle_plugin_options_validate( $input ) {
+	//TODO: Validate input
+	$outlist = explode(",", $input);
+	$outlist = arra_map('trim', $outlist);
+    return $outlist;
+}
+
+function gutenberg_toggle_plugin_section_text() {
+    echo '<p>Here you can set all the options for using the API</p>';
+}
+
+function gutenberg_toggle_plugin_setting_api_key() {
+	$options = get_option( 'gutenberg_toggle_plugin_options' );
+	if ($options === false) {
+		$writers_list = "";
+	}
+	else $writers_list = esc_attr( $options['api_key'] );
+    echo "<input id='gutenberg_toggle_plugin_setting_api_key' name='gutenberg_toggle_plugin_options[api_key]' type='text' value='".$writers_list."' />";
+	//echo "<input type='text' value='hello' />";
+}
+
+function gutenberg_toggle_plugin_setting_results_limit() {
+    $options = get_option( 'gutenberg_toggle_plugin_options' );
+    //echo "<input id='gutenberg_toggle_plugin_setting_results_limit' name='gutenberg_toggle_plugin_options[results_limit]' type='text' value='{esc_attr( $options['results_limit'] )}' />";
+	echo "<input type='text' value='there' />";
+}
+
+function gutenberg_toggle_plugin_setting_start_date() {
+    $options = get_option( 'gutenberg_toggle_plugin_options' );
+    //echo "<input id='gutenberg_toggle_plugin_setting_start_date' name='gutenberg_toggle_plugin_options[start_date]' type='text' value='{esc_attr( $options['start_date'] )}' />";
+	echo "<input type='text' value='general' />";
+}
