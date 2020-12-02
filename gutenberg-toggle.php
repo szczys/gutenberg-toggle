@@ -148,8 +148,8 @@ function gutenberg_toggle_get_opts_with_default() {
 
 function gutenberg_toggle_plugin_setting_users() {
 	$options = gutenberg_toggle_get_opts_with_default();
-	$writers_list = esc_attr( $options['users_allowed'] );
-    echo "<input id='gutenberg_toggle_plugin_setting_users' name='gutenberg_toggle_plugin_options[users_allowed]' type='text' value='".$writers_list."' />";
+	$writers_list = $options['users_allowed'];
+	echo "<input id='gutenberg_toggle_plugin_setting_users' name='gutenberg_toggle_plugin_options[users_allowed]' type='text' value='".esc_attr( $writers_list )."' />";
 	//echo "<input type='text' value='hello' />";
 }
 
@@ -160,5 +160,5 @@ function gutenberg_toggle_plugin_setting_all() {
 		$checked = "checked";
 	}
     //echo "<input id='gutenberg_toggle_plugin_setting_all' name='gutenberg_toggle_plugin_options[results_limit]' type='text' value='{esc_attr( $options['results_limit'] )}' />";
-	echo "<input id='gutenberg_toggle_plugin_setting_all' name='gutenberg_toggle_plugin_options[enable_all]' type='checkbox' ".$checked."/>";
+	echo "<input id='gutenberg_toggle_plugin_setting_all' name='gutenberg_toggle_plugin_options[enable_all]' type='checkbox' ".esc_attr( $checked )."/>";
 }
