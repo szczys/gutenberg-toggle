@@ -21,9 +21,17 @@ Replace the scripts entry in package.json with the following:
 ```
 During development use `npm start` to keep javascript up-to-date. Before packaging, run `npm run build` to generate minified code.
 
+## Use VScode and SSH in docker containers
+
+  * Use vscode plugin: ms-vscode-remote.remote-containers
+  * `docker exec -it wordpress_wordpress_1 bash`
+  * `docker exec -it wordpress_db_1 bash`
+
+
 ## Helpful tutorials
 
   * https://www.youtube.com/watch?v=mi8kpAgHYFo
   * https://css-tricks.com/managing-wordpress-metadata-in-gutenberg-using-a-sidebar-plugin/
   * https://www.hostinger.com/tutorials/run-docker-wordpress
   * https://deliciousbrains.com/create-wordpress-plugin-settings-page/
+  * https://code.visualstudio.com/docs/remote/containers-tutorial
